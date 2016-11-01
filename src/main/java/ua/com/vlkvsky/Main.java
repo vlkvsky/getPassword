@@ -1,26 +1,37 @@
 package ua.com.vlkvsky;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.EventQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.UIManager.LookAndFeelInfo;
+import ua.com.vlkvsky.PasswordForm;
 
 class Main {
+    Main() {
+    }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try {
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
+            LookAndFeelInfo[] ex = UIManager.getInstalledLookAndFeels();
+            int var2 = ex.length;
+
+            for(int var3 = 0; var3 < var2; ++var3) {
+                LookAndFeelInfo info = ex[var3];
+                if("Windows".equals(info.getName())) {
                     UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ClassNotFoundException var5) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, (String)null, var5);
         }
+
         EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
-                new PasswordForm().setVisible(true);
+                (new PasswordForm()).setVisible(true);
             }
         });
     }
