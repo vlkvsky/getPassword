@@ -1,237 +1,272 @@
 package ua.com.vlkvsky;
 
-import javax.swing.*;
-import java.io.*;
+import java.awt.Component;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import ua.com.vlkvsky.BuildMainForm;
+import ua.com.vlkvsky.Data;
 
 class TableUtility {
-
     private static List<Data> tableData;
-    String toRunMainFromIDE = "src/main/resources/";
-    private static final String sourceData = "files/resource.dll";
-    private static final String destinationData = "files/backup.dll";
+    private static final String sourceData = Data.getDataFile();
+    private static final String destinationData = Data.getBackupFile();
 
     private TableUtility() {
-        tableData = new ArrayList<>();
+        tableData = new ArrayList();
     }
 
     protected static void initTable() {
         try {
-            backupFile();
+            backup(sourceData, destinationData);
             read();
-        } catch (Exception e) {
+        } catch (Exception var3) {
             try {
-                new File(sourceData).createNewFile();
-                new File(destinationData).createNewFile();
-            } catch (IOException e1) {
-                JOptionPane.showMessageDialog(null, "Folder 'files' not found!\nCreate it here!", "ERROR", 0);
+                (new File(sourceData)).createNewFile();
+                (new File(destinationData)).createNewFile();
+            } catch (IOException var2) {
+                JOptionPane.showMessageDialog((Component)null, "Folder \'files\' not found!\nCreate it here!", "ERROR", 0);
                 System.exit(1);
             }
         }
+
     }
 
     protected static void read() {
         BufferedReader br = null;
+
         try {
-            if (new File(sourceData).exists()) {
+            if((new File(sourceData)).exists()) {
                 br = new BufferedReader(new FileReader(sourceData));
                 getReader(br);
             } else {
-                new File(sourceData).createNewFile();
+                (new File(sourceData)).createNewFile();
                 read();
             }
-        } catch (NullPointerException | IOException ex) {
-            JOptionPane.showMessageDialog(null, "");
+        } catch (IOException | NullPointerException var5) {
+            JOptionPane.showMessageDialog((Component)null, "");
         } finally {
             closeConnection(br);
         }
+
     }
 
     protected static void readFromBackup() {
         BufferedReader br = null;
+
         try {
-            if (new File(destinationData).exists()) {
+            if((new File(destinationData)).exists()) {
                 br = new BufferedReader(new FileReader(destinationData));
                 getReader(br);
             } else {
-                new File(destinationData).createNewFile();
+                (new File(destinationData)).createNewFile();
                 readFromBackup();
             }
-        } catch (NullPointerException | IOException ex) {
-            JOptionPane.showMessageDialog(null, "Read from backup is not available.");
+        } catch (IOException | NullPointerException var5) {
+            JOptionPane.showMessageDialog((Component)null, "Read from backup is not available.");
         } finally {
+            backup(destinationData, sourceData);
             closeConnection(br);
         }
+
     }
 
     protected static void deleteData(Data C) {
-
         BufferedReader br = null;
         String ReWrite = "";
+
         try {
-            if (new File(sourceData).exists()) {
-
+            if((new File(sourceData)).exists()) {
                 br = new BufferedReader(new FileReader(sourceData));
-                String line = "";
-                while ((line = br.readLine()) != null) {
-                    String[] _temp = line.split(",");
-                    if (_temp[0].equalsIgnoreCase(C.getSource()) && _temp[1].equalsIgnoreCase(C.getLogin())
-                            && _temp[2].equalsIgnoreCase(C.getPassword())) {
-                    } else {
-                        ReWrite += line + "\r\n";
-                    }
-                }
-                br.close();
+                String ex = "";
 
-                if (writeFile(ReWrite)) {
-                } else {
-                    JOptionPane.showMessageDialog(null, "Failed to delete data " + C.getSource(), "Error", 0);
-                }
+                while(true) {
+                    String[] _temp;
+                    do {
+                        if((ex = br.readLine()) == null) {
+                            br.close();
+                            if(!writeFile(ReWrite)) {
+                                JOptionPane.showMessageDialog((Component)null, "Failed to delete data " + C.getSource(), "Error", 0);
+                            }
 
-                TableUtility.read();
-                BuildMainForm.BindIntoJTable();
+                            read();
+                            BuildMainForm.BindIntoJTable();
+                            return;
+                        }
+
+                        _temp = ex.split(",");
+                    } while(_temp[0].equalsIgnoreCase(C.getSource()) && _temp[1].equalsIgnoreCase(C.getLogin()) && _temp[2].equalsIgnoreCase(C.getPassword()));
+
+                    ReWrite = ReWrite + ex + "\r\n";
+                }
             } else {
-                new File(sourceData).createNewFile();
+                (new File(sourceData)).createNewFile();
                 read();
             }
-        } catch (IOException ex) {
-            getWindowException(ex);
+        } catch (IOException var8) {
+            getWindowException(var8);
         } finally {
             closeConnection(br);
         }
+
     }
 
     protected static boolean updateData(String source, String login, String password, String NewStringLine) {
         BufferedReader br = null;
         String ReWrite = "";
         boolean success = false;
-        try {
-            if (new File(sourceData).exists()) {
 
+        try {
+            if((new File(sourceData)).exists()) {
                 br = new BufferedReader(new FileReader(sourceData));
-                String line = "";
-                while ((line = br.readLine()) != null) {
-                    if (!"".equals(line)) {
-                        String[] _temp = line.split(",");
-                        if (_temp[0].equalsIgnoreCase(source) && _temp[1].equalsIgnoreCase(login)
-                                && _temp[2].equalsIgnoreCase(password)) {
-                            ReWrite += NewStringLine + "\r\n";
+                String ex = "";
+
+                while(true) {
+                    while(true) {
+                        do {
+                            if((ex = br.readLine()) == null) {
+                                success = writeFile(ReWrite);
+                                read();
+                                return success;
+                            }
+                        } while("".equals(ex));
+
+                        String[] _temp = ex.split(",");
+                        if(_temp[0].equalsIgnoreCase(source) && _temp[1].equalsIgnoreCase(login) && _temp[2].equalsIgnoreCase(password)) {
+                            ReWrite = ReWrite + NewStringLine + "\r\n";
                         } else {
-                            ReWrite += line + "\r\n";
+                            ReWrite = ReWrite + ex + "\r\n";
                         }
                     }
                 }
-                success = writeFile(ReWrite);
-                read();
             } else {
-                new File(sourceData).createNewFile();
+                (new File(sourceData)).createNewFile();
                 read();
                 success = false;
             }
-        } catch (IOException ex) {
-            getWindowException(ex);
+        } catch (IOException var12) {
+            getWindowException(var12);
             success = false;
         } finally {
             closeConnection(br);
         }
+
         return success;
     }
 
     protected static List<Data> search(String searchValue) {
-        List<Data> list = new ArrayList<>();
+        Object list = new ArrayList();
         BufferedReader br = null;
 
         try {
-            if (new File(sourceData).exists()) {
+            if((new File(sourceData)).exists()) {
                 br = new BufferedReader(new FileReader(sourceData));
-                String line;
-                while ((line = br.readLine()) != null) {
-                    if (!"".equals(line)) {
-                        String[] _temp = line.split(",");
-                        if (_temp[0].toLowerCase().contains(searchValue.toLowerCase()) ||
-                                _temp[1].toLowerCase().contains(searchValue.toLowerCase()) ||
-                                _temp[2].toLowerCase().contains(searchValue.toLowerCase())) {
-                            Data c = new Data();
-                            c.setSource(_temp[0]);
-                            c.setLogin(_temp[1]);
-                            c.setPassword(_temp[2]);
-                            list.add(c);
-                        }
-                    }
+                br.readLine();
+
+                while(true) {
+                    String[] _temp;
+                    do {
+                        String ex;
+                        do {
+                            if((ex = br.readLine()) == null) {
+                                return (List)list;
+                            }
+                        } while("".equals(ex));
+
+                        _temp = ex.split(",");
+                    } while(!_temp[0].toLowerCase().contains(searchValue.toLowerCase()) && !_temp[1].toLowerCase().contains(searchValue.toLowerCase()) && !_temp[2].toLowerCase().contains(searchValue.toLowerCase()));
+
+                    Data c = new Data();
+                    c.setSource(_temp[0]);
+                    c.setLogin(_temp[1]);
+                    c.setPassword(_temp[2]);
+                    ((List)list).add(c);
                 }
             } else {
-                new File(sourceData).createNewFile();
+                (new File(sourceData)).createNewFile();
                 list = search(searchValue);
             }
-        } catch (IOException ex) {
-            getWindowException(ex);
+        } catch (IOException var9) {
+            getWindowException(var9);
         } finally {
             closeConnection(br);
         }
 
-        return list;
+        return (List)list;
     }
 
     private static boolean writeFile(String TextToWrite) {
         FileWriter writer = null;
         boolean successfulWrite = false;
+
         try {
             writer = new FileWriter(sourceData);
             writer.write(TextToWrite);
-
             writer.close();
             successfulWrite = true;
-        } catch (IOException ex) {
+        } catch (IOException var12) {
             successfulWrite = false;
-            getWindowException(ex);
+            getWindowException(var12);
         } finally {
             try {
                 writer.close();
-            } catch (IOException ex) {
-                getWindowException(ex);
+            } catch (IOException var11) {
+                getWindowException(var11);
             }
+
         }
+
         return successfulWrite;
     }
 
     protected static boolean appendText(String appendValue) {
         boolean success = false;
+
         try {
-            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(sourceData, true)));
-            out.println(appendValue);
-            out.close();
+            PrintWriter e = new PrintWriter(new BufferedWriter(new FileWriter(sourceData, true)));
+            e.println(appendValue);
+            e.close();
             success = true;
-        } catch (IOException e) {
-            getWindowException(e);
+        } catch (IOException var3) {
+            getWindowException(var3);
         }
+
         return success;
     }
 
-    private static void backupFile() {
+    private static void backup(String sourceData, String destinationData) {
         try {
-//            File sourceFile = new File(sourceData);
-//            File destinationFile = new File(destinationData);
-//            FileUtils.copyFile(sourceFile, destinationFile);
+            FileInputStream is = null;
+            FileOutputStream os = null;
 
-            InputStream is = null;
-            OutputStream os = null;
             try {
                 is = new FileInputStream(sourceData);
                 os = new FileOutputStream(destinationData);
                 byte[] buffer = new byte[1024];
+
                 int length;
-                while ((length = is.read(buffer)) > 0) {
+                while((length = is.read(buffer)) > 0) {
                     os.write(buffer, 0, length);
                 }
             } finally {
                 is.close();
                 os.close();
             }
-        } catch (IOException e) {
+        } catch (IOException var10) {
+            ;
         }
+
     }
 
     protected static void setTableData(List<Data> aAllData) {
@@ -243,51 +278,57 @@ class TableUtility {
     }
 
     private static void closeConnection(BufferedReader br) {
-        if (br != null) {
+        if(br != null) {
             try {
                 br.close();
-            } catch (IOException ex) {
-                Logger.getLogger(TableUtility.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException var2) {
+                Logger.getLogger(TableUtility.class.getName()).log(Level.SEVERE, (String)null, var2);
             }
         }
+
     }
 
     private static void getReader(BufferedReader br) throws IOException {
-        if (tableData == null) {
-            tableData = new ArrayList<>();
+        if(tableData == null) {
+            tableData = new ArrayList();
         } else {
             tableData.clear();
         }
-        StringBuilder sb = new StringBuilder();
-        String line = "";
+
+        String line1 = "";
         Data dataClass = null;
-        while ((line = br.readLine()) != null) {
-            if (!line.equalsIgnoreCase("")) {
+        br.readLine();
+        String line = null;
+
+        while((line = br.readLine()) != null) {
+            if(!line.equalsIgnoreCase("")) {
                 dataClass = new Data();
                 String[] _temp = line.split(",");
                 String _tempValue = _temp[0];
-                if (_tempValue.equalsIgnoreCase("NULL")) {
+                if(_tempValue.equalsIgnoreCase("NULL")) {
                     _tempValue = "";
                 }
+
                 dataClass.setSource(_tempValue);
-
                 _tempValue = _temp[1];
-                if (_tempValue.equalsIgnoreCase("NULL")) {
+                if(_tempValue.equalsIgnoreCase("NULL")) {
                     _tempValue = "";
                 }
-                dataClass.setLogin(_tempValue);
 
+                dataClass.setLogin(_tempValue);
                 _tempValue = _temp[2];
-                if (_tempValue.equalsIgnoreCase("NULL")) {
+                if(_tempValue.equalsIgnoreCase("NULL")) {
                     _tempValue = "";
                 }
+
                 dataClass.setPassword(_tempValue);
                 tableData.add(dataClass);
             }
         }
+
     }
 
     private static void getWindowException(Exception ex) {
-        JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", 0);
+        JOptionPane.showMessageDialog((Component)null, ex.getMessage(), "Error", 0);
     }
 }

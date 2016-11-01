@@ -1,38 +1,50 @@
+
 package ua.com.vlkvsky;
 
 public class Data {
+    private String source = "";
+    private String login = "";
+    private String password = "";
 
-    private String Source;
-    private String Login;
-    private String Password;
+//to run from IDE
+    private static final String dataFile = "src/main/resources/files/resource.dll";
+    private static final String backupFile = "src/main/resources/files/backup.dll";
+//to run builded maven
+//    private static final String dataFile = "files/backup.dll";
+//    private static final String backupFile = "files/backup.dll";
 
     public Data() {
-        Source = "";
-        Login = "";
-        Password = "";
     }
 
     public String getSource() {
-        return Source;
+        return this.source;
     }
 
     public void setSource(String source) {
-        this.Source = source;
+        this.source = source;
     }
 
     public String getLogin() {
-        return Login;
+        return this.login;
     }
 
     public void setLogin(String login) {
-        this.Login = login;
+        this.login = login;
     }
 
     public String getPassword() {
-        return Password;
+        return this.password;
     }
 
     public void setPassword(String password) {
-        this.Password = password;
+        this.password = password;
+    }
+
+    public static String getDataFile() {
+        return dataFile;
+    }
+
+    public static String getBackupFile() {
+        return backupFile;
     }
 }
