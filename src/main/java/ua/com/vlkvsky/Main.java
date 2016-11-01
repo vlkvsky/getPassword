@@ -6,10 +6,9 @@ import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.UIManager.LookAndFeelInfo;
-import ua.com.vlkvsky.PasswordForm;
 
 class Main {
-    Main() {
+    private Main() {
     }
 
     public static void main(String[] args) {
@@ -25,7 +24,7 @@ class Main {
                 }
             }
         } catch (InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ClassNotFoundException var5) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, (String)null, var5);
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, var5);
         }
 
         EventQueue.invokeLater(new Runnable() {

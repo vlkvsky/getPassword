@@ -1,7 +1,6 @@
 package ua.com.vlkvsky;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,7 +25,6 @@ class AddEditForm extends JFrame {
     private JTextField jSource;
     private JTextField jLogin;
     private JButton saveButton;
-    private JButton cancelButton;
     private JTextField jPassword;
     private JTextField jTextStatus;
 
@@ -34,7 +32,7 @@ class AddEditForm extends JFrame {
         this.initComponents();
     }
 
-    protected void UpdateStatus() {
+    void UpdateStatus() {
         if(this.formMode) {
             this.jTextStatus.setText("Add Data Mode");
             this.saveButton.setText(this.formMode?"Save":"Update");
@@ -45,7 +43,7 @@ class AddEditForm extends JFrame {
 
     }
 
-    protected void MapTextBox(Data c) {
+    void MapTextBox(Data c) {
         if(c != null) {
             this.jSource.setText(c.getSource());
             this.jLogin.setText(c.getLogin());
@@ -68,7 +66,7 @@ class AddEditForm extends JFrame {
         this.jPassword = new JTextField();
         JLabel jLabel4 = new JLabel();
         this.saveButton = new JButton();
-        this.cancelButton = new JButton();
+        JButton cancelButton = new JButton();
         this.jTextStatus = new JTextField();
         this.setDefaultCloseOperation(1);
         this.setResizable(false);
@@ -81,6 +79,7 @@ class AddEditForm extends JFrame {
         this.jSource.setFont(new Font("Verdana", 0, 11));
         this.jLogin.setFont(new Font("Verdana", 0, 11));
         this.jLogin.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent evt) {
                 AddEditForm.this.JTextSourceKeyPressed(evt);
             }
@@ -93,13 +92,15 @@ class AddEditForm extends JFrame {
         this.saveButton.setFont(new Font("Verdana", 0, 11));
         this.saveButton.setText("Save");
         this.saveButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 AddEditForm.this.saveActionPerformed(evt);
             }
         });
-        this.cancelButton.setFont(new Font("Verdana", 0, 11));
-        this.cancelButton.setText("Cancel");
-        this.cancelButton.addActionListener(new ActionListener() {
+        cancelButton.setFont(new Font("Verdana", 0, 11));
+        cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 AddEditForm.this.canceButtonActionPerformed(evt);
             }
@@ -112,10 +113,10 @@ class AddEditForm extends JFrame {
         this.jTextStatus.setEnabled(false);
         GroupLayout layout = new GroupLayout(this.getContentPane());
         this.getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.TRAILING, false).addGroup(layout.createSequentialGroup().addContainerGap(-1, 32767).addComponent(this.saveButton).addPreferredGap(ComponentPlacement.RELATED).addComponent(this.cancelButton, -2, 81, -2)).addGroup(Alignment.LEADING, layout.createSequentialGroup().addGap(8, 8, 8).addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(jLabel4).addComponent(this.jPassword, -2, 270, -2).addComponent(jLabel3).addComponent(this.jLogin, -2, 270, -2).addComponent(jLabel2).addComponent(jLabel1).addComponent(this.jSource, -2, 270, -2)))).addContainerGap(0, 0)).addComponent(this.jTextStatus));
-        layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup().addGap(5, 5, 5).addComponent(jLabel1).addGap(5, 5, 5).addComponent(jLabel2).addPreferredGap(ComponentPlacement.RELATED).addComponent(this.jSource, -2, -1, -2).addPreferredGap(ComponentPlacement.RELATED).addComponent(jLabel3).addPreferredGap(ComponentPlacement.RELATED).addComponent(this.jLogin, -2, -1, -2).addPreferredGap(ComponentPlacement.RELATED).addComponent(jLabel4).addPreferredGap(ComponentPlacement.RELATED).addComponent(this.jPassword, -2, -1, -2).addGap(5, 5, 5).addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(this.saveButton).addComponent(this.cancelButton)).addPreferredGap(ComponentPlacement.RELATED, 3, 32767).addComponent(this.jTextStatus, -2, -1, -2)));
+        layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.TRAILING, false).addGroup(layout.createSequentialGroup().addContainerGap(-1, 32767).addComponent(this.saveButton).addPreferredGap(ComponentPlacement.RELATED).addComponent(cancelButton, -2, 81, -2)).addGroup(Alignment.LEADING, layout.createSequentialGroup().addGap(8, 8, 8).addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(jLabel4).addComponent(this.jPassword, -2, 270, -2).addComponent(jLabel3).addComponent(this.jLogin, -2, 270, -2).addComponent(jLabel2).addComponent(jLabel1).addComponent(this.jSource, -2, 270, -2)))).addContainerGap(0, 0)).addComponent(this.jTextStatus));
+        layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup().addGap(5, 5, 5).addComponent(jLabel1).addGap(5, 5, 5).addComponent(jLabel2).addPreferredGap(ComponentPlacement.RELATED).addComponent(this.jSource, -2, -1, -2).addPreferredGap(ComponentPlacement.RELATED).addComponent(jLabel3).addPreferredGap(ComponentPlacement.RELATED).addComponent(this.jLogin, -2, -1, -2).addPreferredGap(ComponentPlacement.RELATED).addComponent(jLabel4).addPreferredGap(ComponentPlacement.RELATED).addComponent(this.jPassword, -2, -1, -2).addGap(5, 5, 5).addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(this.saveButton).addComponent(cancelButton)).addPreferredGap(ComponentPlacement.RELATED, 3, 32767).addComponent(this.jTextStatus, -2, -1, -2)));
         this.pack();
-        this.setLocationRelativeTo((Component)null);
+        this.setLocationRelativeTo(null);
     }
 
     private void canceButtonActionPerformed(ActionEvent evt) {
@@ -152,14 +153,14 @@ class AddEditForm extends JFrame {
                 BuildMainForm.BindIntoJTable();
                 this.dispose();
             } else {
-                JOptionPane.showMessageDialog((Component)null, "Failed to add source : " + Source, "Error", 0);
+                JOptionPane.showMessageDialog(null, "Failed to add source : " + Source, "Error", 0);
             }
         } else if(TableUtility.updateData(this.editDataDetails.getSource(), this.editDataDetails.getLogin(), this.editDataDetails.getPassword(), buildData)) {
             TableUtility.read();
             BuildMainForm.BindIntoJTable();
             this.dispose();
         } else {
-            JOptionPane.showMessageDialog((Component)null, "Failed to update source : " + Source, "Error", 0);
+            JOptionPane.showMessageDialog(null, "Failed to update source : " + Source, "Error", 0);
         }
 
     }

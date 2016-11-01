@@ -1,17 +1,17 @@
 
 package ua.com.vlkvsky;
 
-public class Data {
+class Data {
     private String source = "";
     private String login = "";
     private String password = "";
 
 //to run from IDE
-    private static final String dataFile = "src/main/resources/files/resource.dll";
-    private static final String backupFile = "src/main/resources/files/backup.dll";
+//    private static final String dataFile = "src/main/resources/files/resource.dll1";
+//    private static final String backupFile = "src/main/resources/files/backup.dll1";
 //to run builded maven
-//    private static final String dataFile = "files/backup.dll";
-//    private static final String backupFile = "files/backup.dll";
+    private static final String dataFile = "files/resource.dll";
+    private static final String backupFile = "files/backup.dll";
 
     public Data() {
     }

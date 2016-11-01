@@ -1,7 +1,6 @@
 package ua.com.vlkvsky;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -57,23 +56,26 @@ class BuildMainForm extends JFrame {
         jTable.setFont(new Font("Verdana", 0, 11));
         jTable.setModel(new DefaultTableModel(new Object[][]{{null, null, null}}, new String[]{"Source", "Login", "Password"}));
         jScrollPane1.setViewportView(jTable);
-        addButton.setFont(new Font((String)null, 1, 12));
+        addButton.setFont(new Font(null, 1, 12));
         addButton.setText("Add");
         addButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 BuildMainForm.this.addButtonActionPerformed(evt);
             }
         });
-        editButton.setFont(new Font((String)null, 1, 12));
+        editButton.setFont(new Font(null, 1, 12));
         editButton.setText("Edit");
         editButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 BuildMainForm.this.EditButtonActionPerformed(evt);
             }
         });
-        deleteButton.setFont(new Font((String)null, 1, 12));
+        deleteButton.setFont(new Font(null, 1, 12));
         deleteButton.setText("Delete");
         deleteButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 BuildMainForm.this.DeleteButtonActionPerformed(evt);
             }
@@ -84,34 +86,37 @@ class BuildMainForm extends JFrame {
         jTextStatus.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jTextStatus.setDisabledTextColor(new Color(255, 255, 255));
         jTextStatus.setEnabled(false);
-        copyRight.setFont(new Font((String)null, 1, 16));
+        copyRight.setFont(new Font(null, 1, 16));
         copyRight.setForeground(new Color(0, 0, 0));
         copyRight.setText("©");
         copyRight.setToolTipText("Created by Vadim Volkovskiy");
-        jLabel1.setFont(new Font((String)null, 2, 14));
+        jLabel1.setFont(new Font(null, 2, 14));
         jLabel1.setForeground(new Color(0, 0, 0));
         jLabel1.setText("Search: ");
         this.jTextSearch.setFont(new Font("Verdana", 0, 11));
         searchButton.setText("Search");
         searchButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 BuildMainForm.this.SearchButtonActionPerformed(evt);
             }
         });
-        restoreButton.setFont(new Font((String)null, 1, 12));
+        restoreButton.setFont(new Font(null, 1, 12));
         restoreButton.setForeground(new Color(0, 0, 0));
         restoreButton.setToolTipText("Reload from backup");
         restoreButton.setText("Reload");
         restoreButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 BuildMainForm.this.RestoreButtonActionPerformed(evt);
             }
         });
-        emailButton.setFont(new Font((String)null, 1, 12));
+        emailButton.setFont(new Font(null, 1, 12));
         emailButton.setForeground(new Color(0, 0, 0));
         emailButton.setToolTipText("Send to your Email");
         emailButton.setText("Send");
         emailButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 BuildMainForm.this.EmailButtonActionPerformed(evt);
             }
@@ -122,16 +127,16 @@ class BuildMainForm extends JFrame {
         layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(jTextStatus).addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(jScrollPane1, Alignment.TRAILING, -2, 0, 32767).addGroup(layout.createSequentialGroup().addComponent(jLabel1).addComponent(this.jTextSearch, -2, 600, -2).addPreferredGap(ComponentPlacement.RELATED, -1, 32767).addComponent(searchButton)).addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup().addComponent(addButton).addPreferredGap(ComponentPlacement.RELATED).addComponent(editButton).addPreferredGap(ComponentPlacement.RELATED).addComponent(deleteButton).addPreferredGap(ComponentPlacement.RELATED).addComponent(restoreButton).addPreferredGap(ComponentPlacement.RELATED).addComponent(emailButton).addGap(370).addComponent(copyRight))).addGap(0, 3, 32767))).addContainerGap()));
         layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup().addGap(10, 10, 10).addPreferredGap(ComponentPlacement.UNRELATED).addPreferredGap(ComponentPlacement.RELATED, -1, 32767).addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(jLabel1).addComponent(this.jTextSearch, -2, -1, -2).addComponent(searchButton, -2, 19, -2)).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(jScrollPane1, -2, 300, -2).addGap(5, 5, 5).addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(addButton, Alignment.TRAILING).addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(editButton).addComponent(copyRight).addComponent(deleteButton).addComponent(restoreButton).addComponent(emailButton))).addGap(2, 2, 2).addComponent(jTextStatus, -2, -1, -2).addGap(0, 0, 0)));
         this.pack();
-        this.setLocationRelativeTo((Component)null);
+        this.setLocationRelativeTo(null);
     }
 
-    protected static void BindIntoJTable() {
+    static void BindIntoJTable() {
         jTable.removeAll();
         List data = TableUtility.getTableData();
         if(data != null) {
             int index = 1;
             String[] colNames = new String[]{"ID", "Source", "Login", "Password"};
-            DefaultTableModel dtm = new DefaultTableModel((Object[][])null, colNames);
+            DefaultTableModel dtm = new DefaultTableModel(null, colNames);
 
             int row;
             for(row = 0; row < data.size(); ++row) {

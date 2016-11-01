@@ -1,6 +1,5 @@
 package ua.com.vlkvsky;
 
-import java.awt.Component;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -24,10 +23,11 @@ class TableUtility {
     private static final String destinationData = Data.getBackupFile();
 
     private TableUtility() {
+        //noinspection unchecked
         tableData = new ArrayList();
     }
 
-    protected static void initTable() {
+    static void initTable() {
         try {
             backup(sourceData, destinationData);
             read();
@@ -36,14 +36,14 @@ class TableUtility {
                 (new File(sourceData)).createNewFile();
                 (new File(destinationData)).createNewFile();
             } catch (IOException var2) {
-                JOptionPane.showMessageDialog((Component)null, "Folder \'files\' not found!\nCreate it here!", "ERROR", 0);
+                JOptionPane.showMessageDialog(null, "Folder \'files\' not found!\nCreate it here!", "ERROR", 0);
                 System.exit(1);
             }
         }
 
     }
 
-    protected static void read() {
+    static void read() {
         BufferedReader br = null;
 
         try {
@@ -55,14 +55,14 @@ class TableUtility {
                 read();
             }
         } catch (IOException | NullPointerException var5) {
-            JOptionPane.showMessageDialog((Component)null, "");
+            JOptionPane.showMessageDialog(null, "");
         } finally {
             closeConnection(br);
         }
 
     }
 
-    protected static void readFromBackup() {
+    static void readFromBackup() {
         BufferedReader br = null;
 
         try {
@@ -74,7 +74,7 @@ class TableUtility {
                 readFromBackup();
             }
         } catch (IOException | NullPointerException var5) {
-            JOptionPane.showMessageDialog((Component)null, "Read from backup is not available.");
+            JOptionPane.showMessageDialog(null, "Read from backup is not available.");
         } finally {
             backup(destinationData, sourceData);
             closeConnection(br);
@@ -82,7 +82,7 @@ class TableUtility {
 
     }
 
-    protected static void deleteData(Data C) {
+    static void deleteData(Data C) {
         BufferedReader br = null;
         String ReWrite = "";
 
@@ -97,7 +97,7 @@ class TableUtility {
                         if((ex = br.readLine()) == null) {
                             br.close();
                             if(!writeFile(ReWrite)) {
-                                JOptionPane.showMessageDialog((Component)null, "Failed to delete data " + C.getSource(), "Error", 0);
+                                JOptionPane.showMessageDialog(null, "Failed to delete data " + C.getSource(), "Error", 0);
                             }
 
                             read();
@@ -122,7 +122,7 @@ class TableUtility {
 
     }
 
-    protected static boolean updateData(String source, String login, String password, String NewStringLine) {
+    static boolean updateData(String source, String login, String password, String NewStringLine) {
         BufferedReader br = null;
         String ReWrite = "";
         boolean success = false;
@@ -165,7 +165,7 @@ class TableUtility {
         return success;
     }
 
-    protected static List<Data> search(String searchValue) {
+    static List<Data> search(String searchValue) {
         Object list = new ArrayList();
         BufferedReader br = null;
 
@@ -180,6 +180,7 @@ class TableUtility {
                         String ex;
                         do {
                             if((ex = br.readLine()) == null) {
+                                //noinspection unchecked
                                 return (List)list;
                             }
                         } while("".equals(ex));
@@ -191,6 +192,7 @@ class TableUtility {
                     c.setSource(_temp[0]);
                     c.setLogin(_temp[1]);
                     c.setPassword(_temp[2]);
+                    //noinspection unchecked
                     ((List)list).add(c);
                 }
             } else {
@@ -203,6 +205,7 @@ class TableUtility {
             closeConnection(br);
         }
 
+        //noinspection unchecked
         return (List)list;
     }
 
@@ -230,7 +233,7 @@ class TableUtility {
         return successfulWrite;
     }
 
-    protected static boolean appendText(String appendValue) {
+    static boolean appendText(String appendValue) {
         boolean success = false;
 
         try {
@@ -263,17 +266,16 @@ class TableUtility {
                 is.close();
                 os.close();
             }
-        } catch (IOException var10) {
-            ;
+        } catch (IOException ignored) {
         }
 
     }
 
-    protected static void setTableData(List<Data> aAllData) {
+    static void setTableData(List<Data> aAllData) {
         tableData = aAllData;
     }
 
-    protected static List<Data> getTableData() {
+    static List<Data> getTableData() {
         return tableData;
     }
 
@@ -282,7 +284,7 @@ class TableUtility {
             try {
                 br.close();
             } catch (IOException var2) {
-                Logger.getLogger(TableUtility.class.getName()).log(Level.SEVERE, (String)null, var2);
+                Logger.getLogger(TableUtility.class.getName()).log(Level.SEVERE, null, var2);
             }
         }
 
@@ -290,6 +292,7 @@ class TableUtility {
 
     private static void getReader(BufferedReader br) throws IOException {
         if(tableData == null) {
+            //noinspection unchecked
             tableData = new ArrayList();
         } else {
             tableData.clear();
@@ -329,6 +332,6 @@ class TableUtility {
     }
 
     private static void getWindowException(Exception ex) {
-        JOptionPane.showMessageDialog((Component)null, ex.getMessage(), "Error", 0);
+        JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", 0);
     }
 }

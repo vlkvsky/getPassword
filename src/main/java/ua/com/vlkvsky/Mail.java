@@ -1,7 +1,6 @@
 
 package ua.com.vlkvsky;
 
-import java.awt.Component;
 import java.io.File;
 import java.util.Properties;
 import javax.activation.DataHandler;
@@ -19,12 +18,11 @@ import javax.mail.internet.MimeMultipart;
 import javax.swing.JOptionPane;
 import ua.com.vlkvsky.Data;
 
-public class Mail {
-    private String to;
+class Mail {
 
     public Mail(String sendTo) {
-        this.to = sendTo;
-        this.send(this.to);
+        String to = sendTo;
+        this.send(to);
     }
 
     private void send(String to) {
@@ -37,6 +35,7 @@ public class Mail {
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
         Session session = Session.getInstance(props, new Authenticator() {
+            @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication("get.pass.sender.email@gmail.com", "r3VY1cvq");
             }
@@ -63,9 +62,9 @@ public class Mail {
             e.setContent(multipart);
             Transport.send(e);
             fileDest.renameTo(file);
-            JOptionPane.showMessageDialog((Component)null, "Sent message successfully....");
+            JOptionPane.showMessageDialog(null, "Sent message successfully....");
         } catch (MessagingException var14) {
-            JOptionPane.showMessageDialog((Component)null, "Error sending to email.", "Error", 0);
+            JOptionPane.showMessageDialog(null, "Error sending to email.", "Error", 0);
         }
 
     }
